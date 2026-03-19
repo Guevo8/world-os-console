@@ -33,16 +33,15 @@ def load_projects() -> List[Project]:
 def save_projects(projects: List[Project]) -> None:
     """
     Speichert alle Projekte als JSON.
-
-    mode="json" sorgt dafür, dass datetime-Felder
-    (created_at, updated_at) als Strings serialisiert werden.
+    Pydantic v1 benutzt .dict() statt .model_dump()
     """
     _ensure_storage()
     DATA_FILE.write_text(
         json.dumps(
-            [p.model_dump(mode="json", by_alias=False) for p in projects],
+            [p.dict() for p in projects],
             ensure_ascii=False,
             indent=2,
+            default=str,  # Für datetime Serialisierung
         ),
         encoding="utf-8",
     )
