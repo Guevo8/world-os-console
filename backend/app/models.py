@@ -1,77 +1,99 @@
-from pydantic import BaseModel
-from typing import List, Optional, Literal, Dict, Any
+from pydantic import BaseModel, Field
+from typing import Dict, Any, List, Optional
 from datetime import datetime
 
-
-class Tier0Foundation(BaseModel):
-    canon_statement: Optional[str] = None
-    non_canon_rules: Optional[str] = None
-    physics_magic_rules: Optional[str] = None
-    themes: Optional[str] = None
-    tone: Optional[str] = None
-    constraints: Optional[str] = None
-
-
-class Tier1Core(BaseModel):
-    logline: Optional[str] = None
-    setting_summary: Optional[str] = None
-    core_conflict: Optional[str] = None
-    signature_elements: Optional[str] = None
-    protagonist_factions: Optional[str] = None
-    antagonistic_forces: Optional[str] = None
-
-
-class Tier2Module(BaseModel):
-    id: str
-    name: str
-    category: Optional[str] = None
-    summary: Optional[str] = None
-    importance: Optional[int] = None
-
-
-class Tier3Character(BaseModel):
-    id: str
-    name: str
-    role: Optional[str] = None
-    race_profile: Optional[str] = None
-    goals: Optional[str] = None
-    flaws: Optional[str] = None
-    relationships: Optional[str] = None
-
-
-class Tier4Zone(BaseModel):
-    id: str
-    name: str
-    type: Optional[str] = None
-    summary: Optional[str] = None
-    sensory_notes: Optional[str] = None
-    key_conflicts: Optional[str] = None
-
-
-class Tier5Narrative(BaseModel):
-    id: str
-    title: str
-    kind: Optional[str] = None
-    premise: Optional[str] = None
-    beats: Optional[str] = None
-    outcome: Optional[str] = None
-
-
-class Tiers(BaseModel):
-    T0_foundation: Tier0Foundation
-    T1_core: Tier1Core
-    T2_modules: List[Tier2Module] = []
-    T3_characters: List[Tier3Character] = []
-    T4_zones: List[Tier4Zone] = []
-    T5_narrative: List[Tier5Narrative] = []
-
+# === PROJECT MODEL (EXISTIERT BEREITS) ===
 
 class Project(BaseModel):
+    """Core Project Model - 6-Tier Worldbuilding Framework"""
     id: str
     name: str
-    type: Literal["novel", "game", "ttrpg", "screenplay", "other"] = "other"
-    description: Optional[str] = None
-    created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
+    type: str  # game, novel, ttrpg
+    description: str = ""
+    
+    # T0: Foundation
+    t0: Dict[str, Any] = {
+        "canon": "",
+        "physics": "",
+        "themes": ""
+    }
+    
+    # T1: Core
+    t1: Dict[str, Any] = {
+        "logline": "",
+        "conflict": "",
+        "factions": []
+    }
+    
+    created_at: datetime
+    updated_at: datetime
+
+
+# === CHARACTER MODEL (NEU) ===
+
+class CharacterCard(BaseModel):
+    """TavernAI V2 + U-CPS compatible character card"""
+    id: str = Field(default_factory=lambda: f"char-{int(datetime.now().timestamp())}")
+    project_id: str  # Zu welchem Projekt gehört der Charakter
+    
+    # TavernAI V2 Core Fields
+    name: str
+    description: str = ""
+    personality: str = ""
     tags: List[str] = []
-    tiers: Tiers
+    
+    # U-CPS Extensions (optional)
+    extensions: Dict[str, Any] = {
+        "ucps": {
+            "subject": "",
+            "identity_anchors": [],
+            "outfit": "",
+            "emotion": "",
+            "pose": "",
+            "camera": {},
+            "lighting": {},
+            "environment": "",
+            "style_tags": [],
+            "aspect_ratio": "1:1",
+            "exclusions": []
+        }
+    }
+    
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+
+
+# === PROMPT TEMPLATE MODEL (NEU) ===
+
+class PromptTemplate(BaseModel):
+    """SD Prompt Template for project-specific image generation"""
+    id: str = Field(default_factory=lambda: f"prompt-{int(datetime.now().timestamp())}")
+    project_id: Optional[str] = None  # Kann zu Projekt gehören oder global sein
+    
+    name: str
+    description: str = ""
+    
+    # SD Module Configuration
+    modules: Dict[str, str] = {
+        "shotType": "",
+        "cameraAngle": "",
+        "lensAperture": "",
+        "lighting": "",
+        "styleGenre": "",
+        "textureAtmosphere": "",
+        "colorGrade": "",
+        "composition": "",
+        "focusDepth": "",
+        "aspectRatio": "",
+        "cameraFilm": ""
+    }
+    
+    # Generated Prompts
+    prompt: str = ""
+    negative_prompt: str = ""
+    
+    # Metadata
+    conflicts: List[str] = []
+    
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)

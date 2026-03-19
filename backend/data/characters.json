@@ -1,0 +1,56 @@
+[
+  {
+    "id": "char-1773963335",
+    "project_id": "test",
+    "name": "Test Character",
+    "description": "",
+    "personality": "",
+    "tags": [
+      "test"
+    ],
+    "extensions": {
+      "ucps": {
+        "subject": "",
+        "identity_anchors": [],
+        "outfit": "",
+        "emotion": "",
+        "pose": "",
+        "camera": {},
+        "lighting": {},
+        "environment": "",
+        "style_tags": [],
+        "aspect_ratio": "1:1",
+        "exclusions": []
+      }
+    },
+    "created_at": "2026-03-20 00:35:35.415492",
+    "updated_at": "2026-03-20 00:35:35.415493"
+  },
+  {
+    "id": "char-1773964579",
+    "project_id": "hydraulic-dreams-001",
+    "name": "Kai Voss",
+    "description": "Protagonist",
+    "personality": "",
+    "tags": [
+      "Mechaniker"
+    ],
+    "extensions": {
+      "ucps": {
+        "subject": "",
+        "identity_anchors": [],
+        "outfit": "",
+        "emotion": "",
+        "pose": "",
+        "camera": {},
+        "lighting": {},
+        "environment": "",
+        "style_tags": [],
+        "aspect_ratio": "1:1",
+        "exclusions": []
+      }
+    },
+    "created_at": "2026-03-20 00:56:19.099868",
+    "updated_at": "2026-03-20 00:56:19.099870"
+  }
+]
