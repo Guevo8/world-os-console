@@ -1,87 +1,82 @@
-# World-OS Console (MVP)
+# 🌍 world-os-console
 
-World-OS Console ist Version A deiner World-OS-Familie:
-Eine schlanke Web-Anwendung, mit der Welten nach einem klaren World-OS-Schema (T0–T5)
-als strukturierte Daten angelegt, bearbeitet und exportiert werden können – ohne KI-Integration.
+**6-Tier Worldbuilding Framework** with FastAPI Backend + CLI
 
-Die Idee:
-Erst das Datenmodell & die UX stehen stabil (A), dann kommen KI-Assistenz (B) und Studio-/Multi-Agent-System (C) oben drauf.
+A structured system for building consistent fictional universes for novels, games, TTRPGs, and screenplays.
 
----
+## 🏗️ The 6-Tier System
+T0 Foundation  → Canon, Physics, Themes
+T1 Core        → Logline, Conflict, Factions
+T2 Modules     → Magic, Technology, Culture
+T3 Characters  → NPCs, Goals, Relationships
+T4 Zones       → Locations, Atmosphere
+T5 Narrative   → Plots, Story Arcs
+## 🚀 Quickstart
 
-## Features (MVP-Stand)
+### Installation
+```bash
+pip install -e .
+Start Server
+world-os serve
+# Server runs on http://localhost:8000
+# API Docs: http://localhost:8000/docs
+CLI Commands
+# List all projects
+world-os list
 
-- World-OS-Datenmodell (JSON-Schema)
-  - Datei: schema/world_os_project_schema_v1.json
-  - Projekt mit:
-    - id, name, type, description, tags, created_at, updated_at
-    - tiers:
-      - T0_foundation – Kanon, Physik/Magie, Themes, Ton, Constraints
-      - T1_core – World Core Card (Logline, Setting, Core Conflict, Signature Elements, Factions)
-      - T2_modules[] – Module & Systeme (Fraktionen, Öko, Tech, Magiesysteme, …)
-      - T3_characters[] – R.A.C.E.-Lite-Charaktere
-      - T4_zones[] – Zonen/Schauplätze (Lite)
-      - T5_narrative[] – Narrative Chains (Arcs, Quests, Episoden)
+# Create new project
+world-os create "My World" --type novel --description "Epic fantasy saga"
 
-- Beispielprojekt (Heartroot City)
-  - examples/heartroot_demo_lite_project.json
-  - vereinfachte Demo-Welt mit ausgefülltem T0/T1.
+# Show project details
+world-os show my-world
 
-- Backend (FastAPI)
-  - Ordner: backend/
-  - Technologien: Python 3, FastAPI, Uvicorn, Pydantic v2
-  - Endpunkte:
-    - GET  /health                 – Healthcheck
-    - GET  /projects               – Liste aller Projekte
-    - GET  /projects/{project_id}  – einzelnes Projekt
-    - POST /projects               – Projekt anlegen/überschreiben
-    - PUT  /projects/{project_id}  – Projekt aktualisieren
-    - DELETE /projects/{project_id} – Projekt löschen
-  - Persistenz:
-    - JSON-Datei backend/data/projects.json
+# Get help
+world-os --help
+📂 Project Structure
+world-os-console/
+├── backend/          # FastAPI server
+│   ├── app/
+│   │   ├── main.py      # API routes
+│   │   ├── models.py    # Pydantic models
+│   │   └── storage.py   # JSON persistence
+│   └── data/
+│       └── projects.json
+├── cli/              # CLI tool
+│   ├── main.py       # Entry point
+│   ├── client.py     # API client
+│   └── commands/     # Command implementations
+└── setup.py
+🎯 Use Cases
+Authors: Organize novel series worldbuilding
+Game Designers: Create consistent game worlds
+TTRPG Masters: Build campaign settings
+Worldbuilding Coaches: Structure client projects
+🔧 Tech Stack
+Backend: FastAPI, Pydantic, Uvicorn
+CLI: Python argparse, requests
+Storage: JSON file-based (portable)
+📖 API Endpoints
+GET /health - Health check
+GET /projects - List all projects
+GET /projects/{id} - Get project details
+POST /projects - Create project
+PUT /projects/{id} - Update project
+DELETE /projects/{id} - Delete project
+🌟 Example Projects
+The system comes with example projects:
+Heartroot City - Biotech tree city (game)
+Hydraulic Dreams - Steampunk-cyberpunk fusion
+Resonanz-Chroniken - Cyberpunk-fantasy with resonance physics
+Die Echoverbundene Sphäre - Dark fantasy resonance world
+🛠️ Development
+# Run server in development mode
+cd backend
+uvicorn app.main:app --reload
 
-- Frontend (minimaler React-Viewer)
-  - Ordner: frontend/
-  - index.html + main.jsx
-  - Lädt /projects vom Backend und zeigt eine einfache Projektliste + Tier-Roadmap-Viewer.
-
----
-
-## Projektstruktur (Kurz)
-
-- README.md         – dieses Dokument
-- LICENSE           – MIT-Lizenz (2025, Tobias Peters)
-- .gitignore        – ignores für venv, node_modules, Laufzeitdaten
-- schema/
-  - world_os_project_schema_v1.json
-- examples/
-  - heartroot_demo_lite_project.json
-- backend/
-  - requirements.txt
-  - app/
-    - __init__.py
-    - main.py        – FastAPI-App + Endpunkte
-    - models.py      – Pydantic-Modelle für Tiers & Project
-    - storage.py     – JSON-Storage-Layer (schreibt projects.json)
-  - data/
-    - projects.json  – Laufzeitdaten (wird bei Bedarf erzeugt)
-- frontend/
-  - index.html
-  - main.jsx
-
----
-
-## Backend-Quickstart
-
-    cd backend
-    python -m venv .venv
-    source .venv/bin/activate
-    pip install -r requirements.txt
-    uvicorn app.main:app --reload
-    # → http://127.0.0.1:8000
-
-## Frontend (aktuell minimal)
-
-    cd frontend
-    # Optional: Vite/React einrichten, main.jsx anpassen
-    # Für den MVP reicht es, die index.html im Browser zu öffnen
+# Run CLI from source
+python cli/main.py list
+📝 License
+MIT
+👤 Author
+Tobi Peters (Guevo8)
+Built with Python 🐍 for structured creative worldbuilding
