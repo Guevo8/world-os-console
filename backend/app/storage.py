@@ -14,8 +14,11 @@ PROMPTS_FILE = DATA_PATH / "prompts.json"
 
 def _ensure_storage() -> None:
     DATA_PATH.mkdir(parents=True, exist_ok=True)
-    if not DATA_FILE.exists():
-        DATA_FILE.write_text("[]", encoding="utf-8")
+    
+    # Stelle sicher, dass alle JSON-Dateien existieren
+    for file_path in (DATA_FILE, CHARACTERS_FILE, PROMPTS_FILE):
+        if not file_path.exists():
+            file_path.write_text("[]", encoding="utf-8")
 
 
 # =====================================================
@@ -43,8 +46,7 @@ def save_projects(projects: List[Project]) -> None:
 
 def load_characters() -> List[CharacterCard]:
     """Load all characters from JSON"""
-    if not CHARACTERS_FILE.exists():
-        return []
+    _ensure_storage()
     
     try:
         with open(CHARACTERS_FILE, 'r', encoding='utf-8') as f:
@@ -83,12 +85,16 @@ def save_character(character: CharacterCard) -> CharacterCard:
 def delete_character(character_id: str) -> bool:
     """Delete character by ID"""
     characters = load_characters()
-    characters = [c for c in characters if c.id != character_id]
+    before = len(characters)
     
-    with open(CHARACTERS_FILE, 'w', encoding='utf-8') as f:
-        json.dump([c.dict() for c in characters], f, indent=2, default=str)
+    remaining = [c for c in characters if c.id != character_id]
+    deleted = len(remaining) != before
     
-    return True
+    if deleted:
+        with open(CHARACTERS_FILE, 'w', encoding='utf-8') as f:
+            json.dump([c.dict() for c in remaining], f, indent=2, default=str)
+    
+    return deleted
 
 
 # =====================================================
@@ -97,8 +103,7 @@ def delete_character(character_id: str) -> bool:
 
 def load_prompts() -> List[PromptTemplate]:
     """Load all prompt templates from JSON"""
-    if not PROMPTS_FILE.exists():
-        return []
+    _ensure_storage()
     
     try:
         with open(PROMPTS_FILE, 'r', encoding='utf-8') as f:
@@ -137,10 +142,13 @@ def save_prompt(prompt: PromptTemplate) -> PromptTemplate:
 def delete_prompt(prompt_id: str) -> bool:
     """Delete prompt template by ID"""
     prompts = load_prompts()
-    prompts = [p for p in prompts if p.id != prompt_id]
+    before = len(prompts)
     
-    with open(PROMPTS_FILE, 'w', encoding='utf-8') as f:
-        json.dump([p.dict() for p in prompts], f, indent=2, default=str)
+    remaining = [p for p in prompts if p.id != prompt_id]
+    deleted = len(remaining) != before
     
-    return True
-
+    if deleted:
+        with open(PROMPTS_FILE, 'w', encoding='utf-8') as f:
+            json.dump([p.dict() for p in remaining], f, indent=2, default=str)
+    
+    return deleted

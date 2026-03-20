@@ -1,6 +1,8 @@
 from pydantic import BaseModel, Field
 from typing import Dict, Any, List, Optional
 from datetime import datetime
+from uuid import uuid4
+
 
 # === PROJECT MODEL (EXISTIERT BEREITS) ===
 
@@ -12,18 +14,22 @@ class Project(BaseModel):
     description: str = ""
     
     # T0: Foundation
-    t0: Dict[str, Any] = {
-        "canon": "",
-        "physics": "",
-        "themes": ""
-    }
+    t0: Dict[str, Any] = Field(
+        default_factory=lambda: {
+            "canon": "",
+            "physics": "",
+            "themes": ""
+        }
+    )
     
     # T1: Core
-    t1: Dict[str, Any] = {
-        "logline": "",
-        "conflict": "",
-        "factions": []
-    }
+    t1: Dict[str, Any] = Field(
+        default_factory=lambda: {
+            "logline": "",
+            "conflict": "",
+            "factions": []
+        }
+    )
     
     created_at: datetime
     updated_at: datetime
@@ -33,31 +39,33 @@ class Project(BaseModel):
 
 class CharacterCard(BaseModel):
     """TavernAI V2 + U-CPS compatible character card"""
-    id: str = Field(default_factory=lambda: f"char-{int(datetime.now().timestamp())}")
+    id: str = Field(default_factory=lambda: f"char-{uuid4().hex}")
     project_id: str  # Zu welchem Projekt gehört der Charakter
     
     # TavernAI V2 Core Fields
     name: str
     description: str = ""
     personality: str = ""
-    tags: List[str] = []
+    tags: List[str] = Field(default_factory=list)
     
     # U-CPS Extensions (optional)
-    extensions: Dict[str, Any] = {
-        "ucps": {
-            "subject": "",
-            "identity_anchors": [],
-            "outfit": "",
-            "emotion": "",
-            "pose": "",
-            "camera": {},
-            "lighting": {},
-            "environment": "",
-            "style_tags": [],
-            "aspect_ratio": "1:1",
-            "exclusions": []
+    extensions: Dict[str, Any] = Field(
+        default_factory=lambda: {
+            "ucps": {
+                "subject": "",
+                "identity_anchors": [],
+                "outfit": "",
+                "emotion": "",
+                "pose": "",
+                "camera": {},
+                "lighting": {},
+                "environment": "",
+                "style_tags": [],
+                "aspect_ratio": "1:1",
+                "exclusions": []
+            }
         }
-    }
+    )
     
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
@@ -67,33 +75,35 @@ class CharacterCard(BaseModel):
 
 class PromptTemplate(BaseModel):
     """SD Prompt Template for project-specific image generation"""
-    id: str = Field(default_factory=lambda: f"prompt-{int(datetime.now().timestamp())}")
+    id: str = Field(default_factory=lambda: f"prompt-{uuid4().hex}")
     project_id: Optional[str] = None  # Kann zu Projekt gehören oder global sein
     
     name: str
     description: str = ""
     
     # SD Module Configuration
-    modules: Dict[str, str] = {
-        "shotType": "",
-        "cameraAngle": "",
-        "lensAperture": "",
-        "lighting": "",
-        "styleGenre": "",
-        "textureAtmosphere": "",
-        "colorGrade": "",
-        "composition": "",
-        "focusDepth": "",
-        "aspectRatio": "",
-        "cameraFilm": ""
-    }
+    modules: Dict[str, str] = Field(
+        default_factory=lambda: {
+            "shotType": "",
+            "cameraAngle": "",
+            "lensAperture": "",
+            "lighting": "",
+            "styleGenre": "",
+            "textureAtmosphere": "",
+            "colorGrade": "",
+            "composition": "",
+            "focusDepth": "",
+            "aspectRatio": "",
+            "cameraFilm": ""
+        }
+    )
     
     # Generated Prompts
     prompt: str = ""
     negative_prompt: str = ""
     
     # Metadata
-    conflicts: List[str] = []
+    conflicts: List[str] = Field(default_factory=list)
     
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
