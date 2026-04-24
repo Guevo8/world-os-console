@@ -1,4 +1,7 @@
 # world-os-console
+
+Managing fictional worlds, characters and AI image prompts across multiple creative projects becomes complex fast. world-os-console is a local-first backend + CLI that structures worldbuilding data in a 6-tier framework and keeps characters, prompt templates and project metadata queryable via REST API.
+
 **Worldbuilding Framework + Character Management + Prompt Templates**
 
 Version 2.0 - Production-Ready Backend with CLI
